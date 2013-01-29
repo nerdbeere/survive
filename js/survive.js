@@ -12,6 +12,7 @@ var Survive = (function() {
 
 		$elem.on('click', function() {
 			$elem.requestFullScreen();
+
 			$elem.attr('width', screen.width);
 			$elem.attr('height', screen.height);
 			width = screen.width;
@@ -23,6 +24,11 @@ var Survive = (function() {
 		});
 
 		$(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange',function(e) {
+//			canvas.requestPointerLock = 	canvas.requestPointerLock    ||
+//				canvas.mozRequestPointerLock ||
+//				canvas.webkitRequestPointerLock;
+//			canvas.requestPointerLock();
+
 			loop();
 		});
 	}
