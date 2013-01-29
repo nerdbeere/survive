@@ -2,33 +2,46 @@ var Survive = (function() {
 
 	var tileSize = 20;
 
-	var $elem, canvas, ctx, width, height;
+	var $elem, canvas, ctx, width, height, mousePos;
 
 	function init() {
 
 		$elem = $('#map');
-		width = $elem.width();
-		height = $elem.height();
 		canvas = $elem[0];
 		ctx = canvas.getContext('2d');
 
-		drawTiles();
-		canvas.addEventListener('mousemove', function(evt) {
-			redraw(evt);
-		}, false);
+		$elem.on('click', function() {
+			$elem.requestFullScreen();
+			$elem.attr('width', screen.width);
+			$elem.attr('height', screen.height);
+			width = screen.width;
+			height = screen.height;
+		});
+
+		$(window).on('mousemove', function(e) {
+			mousePos = getMousePos(canvas, e);
+		});
+
+		$(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange',function(e) {
+			loop();
+		});
 	}
 
-	function redraw(evt) {
-		var mousePos = getMousePos(canvas, evt);
+	var loop = function() {
+		redraw();
+		window.setTimeout(loop, 17);
+	};
+
+	function redraw() {
 		var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
 
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		drawTiles(mousePos);
+		drawTiles();
 		writeMessage(canvas, message);
 	}
 
-	function drawTiles(mousePos) {
+	function drawTiles() {
 		for(var i = 0; i < width / tileSize; i++) {
 			for(var j = 0; j < height / tileSize; j++) {
 				ctx.strokeRect(j * tileSize, i * tileSize, tileSize, tileSize);
@@ -57,11 +70,11 @@ var Survive = (function() {
 		ctx.fillText(message, 0, 20);
 	}
 
-	function getMousePos(canvas, evt) {
+	function getMousePos(canvas, e) {
 		var rect = canvas.getBoundingClientRect();
 		return {
-			x: evt.clientX - rect.left,
-			y: evt.clientY - rect.top
+			x: e.clientX - rect.left,
+			y: e.clientY - rect.top
 		};
 	}
 
