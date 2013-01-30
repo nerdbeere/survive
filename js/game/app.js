@@ -37,23 +37,32 @@ Survive.Game = (function() {
 	}
 
 	var loop = function() {
-		redraw();
-		window.setTimeout(loop, 1000 / FPS);
-	};
+			redraw();
+			window.setTimeout(loop, 1000 / FPS);
+		};
+
+	function angle(pos1, pos2) {
+		var dx = pos1.x - pos2.x;
+		var dy = pos1.y - pos2.y;
+		return Math.atan2(dy, dx) * (180 / Math.PI);
+	}
 
 	function redraw() {
 		Survive.context.clearRect(0, 0, canvas.width, canvas.height);
 
 		var player = new Survive.Assets.Player();
+		player.rotation = angle(mousePos, {
+			x: player.x,
+			y: player.y
+		}) + 90;
 		player.draw();
 
 		var mousePosition = new Survive.Assets.MousePosition(mousePos);
 		mousePosition.draw();
-
-		//drawTiles();
 	}
 
 	function drawTiles() {
+		Survive.context.strokeStyle = '#EEE';
 		for(var i = 0; i < width / tileSize; i++) {
 			for(var j = 0; j < height / tileSize; j++) {
 				Survive.context.strokeRect(j * tileSize, i * tileSize, tileSize, tileSize);
