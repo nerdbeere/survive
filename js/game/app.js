@@ -57,7 +57,7 @@ Survive.Game = (function() {
 			}
 		});
 
-		timer.start(60 / 1000);
+		timer.start(1000 / 60);
 	}
 
 	function angle(pos1, pos2) {
