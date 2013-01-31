@@ -5,6 +5,29 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
+var io = require('socket.io').listen(3001);
+
+var players = {};
+
+var playerCount = 0;
+io.sockets.on('connection', function(socket) {
+  socket.emit('currentPlayerData', {
+    playerId: socket.store.id,
+    x: 400,
+    y: 400,
+    rotation: 0
+  });
+  socket.emit('players', players);
+
+  socket.on('currentPlayerClientUpdate', function(data) {
+    players[data.playerId] = data;
+  });
+
+  setInterval(function() {
+    socket.emit('players', players);
+  }, 20);
+
+});
 
 var app = express();
 
