@@ -5,9 +5,6 @@ var Survive = {
 
 Survive.Game = (function() {
 
-	var tileSize = 20;
-	var FPS = 60;
-
 	var $elem, canvas, width, height, player;
 	var mousePos = {x: 0, y: 0};
 
@@ -15,6 +12,7 @@ Survive.Game = (function() {
 	
 	var mousePosition;
 	var FPS;
+	var tiles;
 
 	function init() {
 
@@ -37,6 +35,7 @@ Survive.Game = (function() {
 		
 		mousePosition = new Survive.Assets.MousePosition();
 		FPS = new Survive.Assets.FPS();
+		tiles = new Survive.Assets.Tiles();
 
 		$(window).on('mousemove', function(e) {
 			mousePos = getMousePos(canvas, e);
@@ -69,6 +68,8 @@ Survive.Game = (function() {
 	function redraw(delta, fps) {
 		Survive.context.clearRect(0, 0, canvas.width, canvas.height);
 
+		tiles.draw();
+
 		if(thrust) {
 			var vector1 = Dot(mousePos.x - player.x, mousePos.y - player.y);
 			Vector.normalize(vector1);
@@ -87,30 +88,6 @@ Survive.Game = (function() {
 		FPS.draw(fps);
 	}
 
-	function drawTiles() {
-		Survive.context.strokeStyle = '#EEE';
-		for(var i = 0; i < width / tileSize; i++) {
-			for(var j = 0; j < height / tileSize; j++) {
-				Survive.context.strokeRect(j * tileSize, i * tileSize, tileSize, tileSize);
-			}
-		}
-
-		if(typeof mousePos !== 'undefined') {
-			var pos = getNearestRectCoords(mousePos);
-			Survive.context.fillRect(pos.x * tileSize, pos.y * tileSize, tileSize, tileSize);
-		}
-	}
-
-	function getNearestRectCoords(pos) {
-		var x = Math.floor(pos.x / tileSize);
-		var y = Math.floor(pos.y / tileSize);
-
-		return {
-			x: x,
-			y: y
-		};
-	}
-
 	function getMousePos(canvas, e) {
 		var rect = canvas.getBoundingClientRect();
 		return {
@@ -120,6 +97,12 @@ Survive.Game = (function() {
 	}
 
 	return {
+		getWidth: function() {
+			return width;
+		},
+		getHeight: function() {
+			return height;
+		},
 		init: function() {
 			init();
 		}

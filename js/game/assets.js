@@ -76,3 +76,29 @@ Survive.Assets.FPS = Class.extend({
 		Survive.context.fillText(message, this.x, this.y);
 	}
 });
+
+Survive.Assets.Tiles = Class.extend({
+	tileSize: 32,
+	getNearestRectCoords: function(pos) {
+		var x = Math.floor(pos.x / tileSize);
+		var y = Math.floor(pos.y / tileSize);
+
+		return {
+			x: x,
+			y: y
+		};
+	},
+	draw: function() {
+		Survive.context.strokeStyle = '#EEE';
+		for(var i = 0; i < Survive.Game.getHeight() / this.tileSize; i++) {
+			for(var j = 0; j < Survive.Game.getWidth() / this.tileSize; j++) {
+				Survive.context.strokeRect(j * this.tileSize, i * this.tileSize, this.tileSize, this.tileSize);
+			}
+		}
+
+		if(typeof mousePos !== 'undefined') {
+			var pos = getNearestRectCoords(mousePos);
+			Survive.context.fillRect(pos.x * tileSize, pos.y * tileSize, tileSize, tileSize);
+		}
+	}
+});
