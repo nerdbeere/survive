@@ -1,59 +1,50 @@
-var Vector = Class.extend({
-	x: 0,
-	y: 0,
+var Dot = function(x, y) {
+	return {x: x, y: y};
+};
+
+var Vector = {
 	
-	init: function(x, y) {
-		this.x = x;
-		this.y = y;
+	abs: function(vector) {
+		vector.x = Math.abs(vector.x);
+		vector.y = Math.abs(vector.y);
 	},
 	
-	abs: function() {
-		this.x = Math.abs(this.x);
-		this.y = Math.abs(this.y);
-		return this;
+	add: function(vector1, vector2) {
+		vector1.x += vector2.x;
+		vector1.y += vector2.y;
 	},
 	
-	add: function(vector) {
-		this.x += vector.x;
-		this.y += vector.y;
-		return this;
+	subtract: function(vector1, vector2) {
+		vector1.x -= vector2.x;
+		vector1.y -= vector2.y;
 	},
 	
-	subtract: function(vector) {
-		this.x -= vector.x;
-		this.y -= vector.y;
-		return this;
+	multiply: function(vector1, vector2) {
+		vector1.x *= vector2.x;
+		vector1.y *= vector2.y;
 	},
 	
-	multiply: function(vector) {
-		this.x *= vector.x;
-		this.y *= vector.y;
-		return this;
+	divide: function(vector1, vector2) {
+		vector1.x /= vector2.x;
+		vector1.y /= vector2.y;
 	},
 	
-	divide: function(vector) {
-		this.x /= vector.x;
-		this.y /= vector.y;
-		return this;
+	normalize: function(vector) {
+		var length = Vector.getLength(vector);
+		vector.x /= length;
+		vector.y /= length;
 	},
 	
-	normalize: function() {
-		var length = this.getLength();
-		this.x /= length;
-		this.y /= length;
-		return this;
+	getLength: function(vector) {
+		return Math.sqrt(vector.x * vector.x + vector.y * vector.y);
 	},
 	
-	getLength: function() {
-		return Math.sqrt(this.x * this.x + this.y * this.y);
+	getLengthSquared: function(vector) {
+		return vector.x * vector.x + vector.y * vector.y;
 	},
 	
-	getLengthSquared: function() {
-		return this.x * this.x + this.y * this.y;
-	},
-	
-	dotProduct: function(vector) {
-		return this.x * vector.x + this.y * vector.y;
+	dotProduct: function(vector1, vector2) {
+		return vector1.x * vector2.x + vector1.y * vector2.y;
 	}
 	
-});
+};

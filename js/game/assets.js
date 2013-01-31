@@ -55,15 +55,21 @@ Survive.Assets.Player = Class.extend({
 Survive.Assets.MousePosition = Class.extend({
 	x: 0,
 	y: 20,
-	pos: {
-		x: 0,
-		y: 0
-	},
-	init: function(pos) {
-		this.pos = pos;
-	},
-	draw: function() {
-		var message = 'Mouse position: ' + this.pos.x + ',' + this.pos.y;
+	draw: function(pos) {
+		var message = 'Mouse position: ' + pos.x + ',' + pos.y;
+
+		Survive.context.font = '18pt Calibri';
+		Survive.context.fillStyle = 'black';
+		Survive.context.fillText(message, this.x, this.y);
+	}
+});
+
+
+Survive.Assets.FPS = Class.extend({
+	x: 0,
+	y: 60,
+	draw: function(fps) {
+		var message = 'FPS: ' + fps;
 
 		Survive.context.font = '18pt Calibri';
 		Survive.context.fillStyle = 'black';

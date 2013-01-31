@@ -12,6 +12,9 @@ Survive.Game = (function() {
 	var mousePos = {x: 0, y: 0};
 
 	var thrust = false;
+	
+	var mousePosition;
+	var FPS;
 
 	function init() {
 
@@ -26,7 +29,14 @@ Survive.Game = (function() {
 		width = $(window).width();
 		height = $(window).height();
 
-		loop();
+		var timer = new Timer();
+		
+		timer.addJob(function(timer) {
+			redraw(timer.delta, timer.fps);
+		});
+		
+		mousePosition = new Survive.Assets.MousePosition();
+		FPS = new Survive.Assets.FPS();
 
 		$(window).on('mousemove', function(e) {
 			mousePos = getMousePos(canvas, e);
@@ -46,12 +56,9 @@ Survive.Game = (function() {
 				thrust = false;
 			}
 		});
-	}
 
-	var loop = function() {
-		redraw();
-		window.setTimeout(loop, 1000 / FPS);
-	};
+		timer.start(60 / 1000);
+	}
 
 	function angle(pos1, pos2) {
 		var dx = pos1.x - pos2.x;
@@ -59,12 +66,15 @@ Survive.Game = (function() {
 		return Math.atan2(dy, dx) * (180 / Math.PI);
 	}
 
-	function redraw() {
+	function redraw(delta, fps) {
 		Survive.context.clearRect(0, 0, canvas.width, canvas.height);
 
 		if(thrust) {
-			player.x += (mousePos.x - player.x)* 1/30;
-			player.y += (mousePos.y - player.y)* 1/30;
+			var vector1 = Dot(mousePos.x - player.x, mousePos.y - player.y);
+			Vector.normalize(vector1);
+			
+			player.x += vector1.x * 0.4 * delta;
+			player.y += vector1.y * 0.4 * delta;
 		}
 
 		player.rotation = angle(mousePos, {
@@ -73,8 +83,8 @@ Survive.Game = (function() {
 		}) + 90;
 		player.draw();
 
-		var mousePosition = new Survive.Assets.MousePosition(mousePos);
-		mousePosition.draw();
+		mousePosition.draw(mousePos);
+		FPS.draw(fps);
 	}
 
 	function drawTiles() {
