@@ -17,18 +17,31 @@ var Transformation = Class.extend({
 		y: 0
 	},
 	
+	addTransformation: function(transformation) {
+		this.addTranslation(transformation.Translation);
+		return this;
+	},
+	
+	removeTransformation: function(transformation) {
+		this.removeTranslation(transformation.Translation);
+		return this;
+	},
+	
 	addTranslation: function(translation) {
 		this.Translation.x += translation.x;
 		this.Translation.y += translation.y;
+		return this;
 	},
 	
 	removeTranslation: function(translation) {
 		this.Translation.x -= translation.x;
 		this.Translation.y -= translation.y;
+		return this;
 	},
 	
 	rotateDegree: function(deg) {
-		return this.rotate(deg * (Math.PI/180));
+		this.rotate(deg * (Math.PI/180));
+		return this;
 	},
 	
 	rotate: function(rad) {
@@ -39,11 +52,13 @@ var Transformation = Class.extend({
 		this.Rotation.b = sintheta;
 		this.Rotation.c = -sintheta;
 		this.Rotation.d = costheta;
+		return this;
 	},
 	
 	scale: function(x, y) {
 		this.Scale.x = x;
 		this.Scale.y = y;
+		return this;
 	},
 	
 });
