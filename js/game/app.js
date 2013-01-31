@@ -8,38 +8,50 @@ Survive.Game = (function() {
 	var tileSize = 20;
 	var FPS = 60;
 
-	var $elem, canvas, width, height, mousePos;
+	var $elem, canvas, width, height, player;
+	var mousePos = {x: 0, y: 0};
+
+	var thrust = false;
 
 	function init() {
+
+		player = new Survive.Assets.Player();
 
 		$elem = $('#map');
 		canvas = $elem[0];
 		Survive.context = canvas.getContext('2d');
 
-		$('#startBtn').on('click', function() {
-			$elem.requestFullScreen();
+		$elem.attr('width', $(window).width());
+		$elem.attr('height', $(window).height());
+		width = $(window).width();
+		height = $(window).height();
 
-			$elem.attr('width', screen.width);
-			$elem.attr('height', screen.height);
-			width = screen.width;
-			height = screen.height;
-		});
+		loop();
 
 		$(window).on('mousemove', function(e) {
 			mousePos = getMousePos(canvas, e);
 		});
 
-		$(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(e) {
-			if(fullScreenApi.isFullScreen()) {
-				loop();
+		$(window).on('keydown', function(e) {
+			console.log(e.keyCode);
+			// w
+			if(e.keyCode == 87) {
+				thrust = true;
+			}
+		});
+
+		$(window).on('keyup', function(e) {
+			// w
+			if(e.keyCode == 87) {
+				thrust = false;
 			}
 		});
 	}
 
 	var loop = function() {
-			redraw();
-			window.setTimeout(loop, 1000 / FPS);
-		};
+		redraw();
+		window.setTimeout(loop, 1000 / FPS);
+	};
 
 	function angle(pos1, pos2) {
 		var dx = pos1.x - pos2.x;
@@ -50,7 +62,11 @@ Survive.Game = (function() {
 	function redraw() {
 		Survive.context.clearRect(0, 0, canvas.width, canvas.height);
 
-		var player = new Survive.Assets.Player();
+		if(thrust) {
+			player.x += (mousePos.x - player.x)* 1/30;
+			player.y += (mousePos.y - player.y)* 1/30;
+		}
+
 		player.rotation = angle(mousePos, {
 			x: player.x,
 			y: player.y
