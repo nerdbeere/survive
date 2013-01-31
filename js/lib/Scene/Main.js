@@ -1,0 +1,2 @@
+//Namespace declaration
+var Scene = {};

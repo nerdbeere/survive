@@ -1,4 +1,4 @@
-Vector = Class.extend({
+var Vector = Class.extend({
 	x: 0,
 	y: 0,
 	
