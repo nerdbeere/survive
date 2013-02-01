@@ -7,6 +7,10 @@ var http = require('http');
 var path = require('path');
 var io = require('socket.io').listen(3001);
 
+io.set('transports', [
+	'websocket'
+]);
+
 var players = {};
 
 var playerCount = 0;
