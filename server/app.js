@@ -17,8 +17,8 @@ var players = {};
 setInterval(function() {
 	for(var playerId in players) {
 		if(players[playerId].lastUpdate + 10000 < new Date().getTime()) {
-			players[playerId].x = -100;
-			players[playerId].y = -100;
+			players[playerId].worldPos.x = -100;
+			players[playerId].worldPos.y = -100;
 		}
 	}
 }, 1000);
@@ -26,8 +26,10 @@ setInterval(function() {
 io.sockets.on('connection', function(socket) {
   socket.emit('currentPlayerData', {
     playerId: socket.store.id,
-    x: 400,
-    y: 400,
+    worldPos: {
+      x: 400,
+      y: 400
+    },
     rotation: 0
   });
   socket.emit('players', players);

@@ -43,6 +43,17 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 			playerId: this.playerId
 		};
 	},
+	calcRelativePosition: function(foreignWorldPos) {
+		var offset = {
+			x: this.worldPos.x - foreignWorldPos.x,
+			y: this.worldPos.y - foreignWorldPos.y
+		};
+
+		return {
+			x: this.x + offset.x,
+			y: this.y + offset.y
+		}
+	},
 	update: function() {
 		var mousePos = Survive.Assets.MousePosition.get();
 		if(this.movement.y === 1) {
@@ -57,6 +68,12 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 		if(this.isCurrentPlayer) {
 			this.x = Survive.Game.getWidth() / 2;
 			this.y = Survive.Game.getHeight() / 2;
+
+			this.drawWorldPos();
+		} else {
+			var playerRelPos = Survive.Player.calcRelativePosition(worldPos);
+			this.x = playerRelPos.x;
+			this.y = playerRelPos.y;
 		}
 
 		this.rotation = Math.angle(mousePos, {
@@ -67,6 +84,11 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 		Survive.socket.emit('currentPlayerClientUpdate', this.get());
 
 		this.draw();
+	},
+	drawWorldPos: function() {
+		Survive.canvas.context.font = '12pt Calibri';
+		Survive.canvas.context.fillStyle = 'black';
+		Survive.canvas.context.fillText(this.worldPos.x.toFixed(2) + ':' + this.worldPos.y.toFixed(2), this.x - 50, this.y + 30);
 	},
 	setMovementY: function(y) {
 		this.movement.y = y;

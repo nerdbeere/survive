@@ -8,7 +8,8 @@ var Survive = {
 	},
 	Assets: {},
 	socket: {},
-	timer: new Timer()
+	timer: new Timer(),
+	Player: {}
 };
 
 Survive.Game = (function() {
@@ -49,8 +50,8 @@ Survive.Game = (function() {
 		});
 
 		Survive.socket.on('currentPlayerData', function(data) {
-			player = new Survive.Assets.Player();
-			player.set(data);
+			Survive.Player = new Survive.Assets.Player();
+			Survive.Player.set(data);
 
 			Survive.timer.start(1000 / 60);
 		});
@@ -58,21 +59,21 @@ Survive.Game = (function() {
 		$(window).on('keydown', function(e) {
 			// w
 			if(e.keyCode == 87) {
-				player.setMovementY(1);
+				Survive.Player.setMovementY(1);
 			}
 		});
 
 		$(window).on('keyup', function(e) {
 			// w
 			if(e.keyCode == 87) {
-				player.setMovementY(0);
+				Survive.Player.setMovementY(0);
 			}
 		});
 	}
 
 	this.createPlayers = function(data) {
 		for(var i in data) {
-			if(player.playerId === data[i].playerId) {
+			if(Survive.Player.playerId === data[i].playerId) {
 				continue;
 			}
 			var p = new Survive.Assets.Player();
@@ -88,7 +89,7 @@ Survive.Game = (function() {
 
 		tiles.draw();
 
-		player.update();
+		Survive.Player.update();
 
 		for(var i in players) {
 			players[i].draw();
