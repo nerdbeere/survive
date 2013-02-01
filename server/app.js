@@ -13,7 +13,16 @@ io.set('transports', [
 
 var players = {};
 
-var playerCount = 0;
+// body cleanup interval
+setInterval(function() {
+	for(var playerId in players) {
+		if(players[playerId].lastUpdate + 10000 < new Date().getTime()) {
+			players[playerId].x = -100;
+			players[playerId].y = -100;
+		}
+	}
+}, 1000);
+
 io.sockets.on('connection', function(socket) {
   socket.emit('currentPlayerData', {
     playerId: socket.store.id,
@@ -24,6 +33,7 @@ io.sockets.on('connection', function(socket) {
   socket.emit('players', players);
 
   socket.on('currentPlayerClientUpdate', function(data) {
+    data.lastUpdate = new Date().getTime();
     players[data.playerId] = data;
   });
 
