@@ -16,12 +16,17 @@ Survive.Assets.Main = Class.extend({
 });
 
 Survive.Assets.Player = Survive.Assets.Main.extend({
-	x: 400,
-	y: 400,
+	x: 0,
+	y: 0,
 	rotation: 0,
 	width: 20,
 	height: 20,
 	playerId: null,
+	isCurrentPlayer: true,
+	worldPos: {
+		x: 0,
+		y: 0
+	},
 	movement: {
 		x: 0,
 		y: 0
@@ -33,6 +38,7 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 		return {
 			x: this.x,
 			y: this.y,
+			worldPos: this.worldPos,
 			rotation: this.rotation,
 			playerId: this.playerId
 		};
@@ -43,8 +49,14 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 			var vector1 = Dot(mousePos.x - this.x, mousePos.y - this.y);
 			Vector.normalize(vector1);
 
-			this.x += vector1.x * 0.4 * Survive.timer.delta;
-			this.y += vector1.y * 0.4 * Survive.timer.delta;
+			this.worldPos.x += vector1.x * 0.4 * Survive.timer.delta;
+			this.worldPos.y += vector1.y * 0.4 * Survive.timer.delta;
+		}
+
+		// player always sticks to the center of the screen
+		if(this.isCurrentPlayer) {
+			this.x = Survive.Game.getWidth() / 2;
+			this.y = Survive.Game.getHeight() / 2;
 		}
 
 		this.rotation = Math.angle(mousePos, {
