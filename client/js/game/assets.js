@@ -36,8 +36,6 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 	},
 	get: function() {
 		return {
-			x: this.x,
-			y: this.y,
 			worldPos: this.worldPos,
 			rotation: this.rotation,
 			playerId: this.playerId
@@ -57,7 +55,7 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 	update: function() {
 		var mousePos = Survive.Assets.MousePosition.get();
 		if(this.movement.y === 1) {
-			var vector1 = Dot(mousePos.x - this.x, mousePos.y - this.y);
+			var vector1 = Dot(mousePos.x - this.worldPos.x, mousePos.y - this.worldPos.y);
 			Vector.normalize(vector1);
 
 			this.worldPos.x += vector1.x * 0.4 * Survive.timer.delta;
@@ -103,7 +101,7 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 
 		Survive.canvas.context.translate(this.x,this.y);
 		Survive.canvas.context.rotate(angleInRadians);
-		Survive.canvas.context.translate(this.x * -1,this.y * -1);
+		Survive.canvas.context.translate(this.x * -1, this.y * -1);
 
 		Survive.canvas.context.fillStyle = '#FF0000';
 
