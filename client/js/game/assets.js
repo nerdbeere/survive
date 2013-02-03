@@ -180,7 +180,7 @@ Survive.Assets.FPS = Survive.Assets.Main.extend({
 });
 
 Survive.Assets.Tiles = Survive.Assets.Main.extend({
-	tileSize: 32,
+	tileSize: 64,
 	getNearestRectCoords: function(pos) {
 		var x = Math.floor(pos.x / tileSize);
 		var y = Math.floor(pos.y / tileSize);
@@ -194,7 +194,7 @@ Survive.Assets.Tiles = Survive.Assets.Main.extend({
 		Survive.canvas.context.strokeStyle = '#EEE';
 		for(var i = 0; i < Survive.Game.getHeight() / this.tileSize; i++) {
 			for(var j = 0; j < Survive.Game.getWidth() / this.tileSize; j++) {
-				Survive.canvas.context.strokeRect(j * this.tileSize, i * this.tileSize, this.tileSize, this.tileSize);
+				Survive.Resources.Images.draw('tile_grass', j * this.tileSize, i * this.tileSize);
 			}
 		}
 

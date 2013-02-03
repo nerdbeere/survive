@@ -9,12 +9,18 @@ var Survive = {
 	Assets: {},
 	socket: {},
 	timer: new Timer(),
-	Player: {}
+	Player: {},
+	Resources: {
+		Images: {}
+	}
 };
 
 Survive.Game = (function() {
 
 	var $elem, width, height, player;
+
+	var STATE_LOADING = true;
+	var STATE_RUNNING = false;
 
 	var FPS;
 	var tiles;
@@ -33,9 +39,11 @@ Survive.Game = (function() {
 		$elem.attr('height', $(window).height());
 		width = $(window).width();
 		height = $(window).height();
-		
+
+		Survive.Resources.Images.load();
+
 		Survive.timer.addJob(function(timer) {
-			redraw(Survive.timer.fps);
+			loop(Survive.timer.fps);
 		});
 
 		FPS = new Survive.Assets.FPS();
@@ -83,8 +91,17 @@ Survive.Game = (function() {
 		return true;
 	};
 
-	function redraw(fps) {
+	function loop(fps) {
 
+		if(STATE_LOADING) {
+			STATE_LOADING = !Survive.Resources.Images.isLoadingComplete();
+			STATE_RUNNING = !STATE_LOADING;
+		} else if(STATE_RUNNING) {
+			drawTick(fps);
+		}
+	}
+
+	function drawTick(fps) {
 		Survive.canvas.clear();
 
 		tiles.draw();
