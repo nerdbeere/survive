@@ -23,6 +23,17 @@ var players = {};
 	}
 }, 1000);*/
 
+var barriers = [
+	{
+		worldPos: {
+			x: 500,
+			y: 500,
+			azimuth: 120
+		},
+		type: 1
+	}
+];
+
 io.sockets.on('connection', function(socket) {
   socket.emit('currentPlayerData', {
     playerId: socket.store.id,
@@ -33,6 +44,7 @@ io.sockets.on('connection', function(socket) {
     rotation: 0
   });
   socket.emit('players', players);
+  socket.emit('barriers', barriers);
 
   socket.on('currentPlayerClientUpdate', function(data) {
     data.lastUpdate = new Date().getTime();
@@ -40,7 +52,7 @@ io.sockets.on('connection', function(socket) {
   });
 
   setInterval(function() {
-    socket.emit('players', players);
+    //socket.emit('players', players);
   }, 20);
 
 });

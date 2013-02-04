@@ -12,7 +12,8 @@ var Survive = {
 	Player: {},
 	Resources: {
 		Images: {}
-	}
+	},
+	Engine: {}
 };
 
 Survive.Game = (function() {
@@ -26,8 +27,11 @@ Survive.Game = (function() {
 	var tiles;
 	var that = this;
 	var players = {};
+	var barriers = {};
 
 	function init() {
+
+		Survive.Engine = new Engine();
 
 		Survive.socket = io.connect('127.0.0.1:3001');
 
@@ -57,8 +61,13 @@ Survive.Game = (function() {
 			that.createPlayers(data);
 		});
 
+		Survive.socket.on('barriers', function(data) {
+			that.createBarriers(data);
+		});
+
 		Survive.socket.on('currentPlayerData', function(data) {
 			Survive.Player = new Survive.Assets.Player();
+			Survive.Camera = new Survive.Assets.Camera(Survive.Player);
 			Survive.Player.set(data);
 
 			Survive.timer.start(1000 / 60);
@@ -91,6 +100,15 @@ Survive.Game = (function() {
 		return true;
 	};
 
+	this.createBarriers = function(data) {
+		for(var i = 0; i < data.length; i++) {
+			var p = new Survive.Assets.Barrier();
+			p.set(data[i]);
+			barriers[i] = p;
+		}
+		return true;
+	};
+
 	function loop(fps) {
 
 		if(STATE_LOADING) {
@@ -107,9 +125,14 @@ Survive.Game = (function() {
 		tiles.draw();
 
 		Survive.Player.update();
+		Survive.Camera.update();
 
 		for(var i in players) {
 			players[i].draw();
+		}
+
+		for(var i in barriers) {
+			barriers[i].update();
 		}
 
 		Survive.Assets.MousePosition.draw();

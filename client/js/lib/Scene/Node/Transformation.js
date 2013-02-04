@@ -24,6 +24,6 @@ Scene.Node.Transformation = Scene.Node.extend({
 		}
 		
 		world.removeTransformation(this.transformation);
-	},
+	}
 	
 });
