@@ -14,14 +14,14 @@ io.set('transports', [
 var players = {};
 
 // body cleanup interval
-setInterval(function() {
+/*setInterval(function() {
 	for(var playerId in players) {
 		if(players[playerId].lastUpdate + 10000 < new Date().getTime()) {
 			players[playerId].worldPos.x = -100;
 			players[playerId].worldPos.y = -100;
 		}
 	}
-}, 1000);
+}, 1000);*/
 
 io.sockets.on('connection', function(socket) {
   socket.emit('currentPlayerData', {
