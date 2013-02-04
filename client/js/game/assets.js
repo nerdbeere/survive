@@ -55,7 +55,8 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 	update: function() {
 		var mousePos = Survive.Assets.MousePosition.get();
 		if(this.movement.y === 1) {
-			var vector1 = Dot(mousePos.x - this.worldPos.x, mousePos.y - this.worldPos.y);
+			var vector1 = Dot(mousePos.x - this.x, mousePos.y - this.y);
+
 			Vector.normalize(vector1);
 
 			this.worldPos.x += vector1.x * 0.4 * Survive.timer.delta;
