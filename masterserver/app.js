@@ -7,53 +7,9 @@ var http = require('http');
 var path = require('path');
 var io = require('socket.io').listen(3001);
 
-io.set('transports', [
-	'websocket'
-]);
-
-var players = {};
-
-// body cleanup interval
-/*setInterval(function() {
-	for(var playerId in players) {
-		if(players[playerId].lastUpdate + 10000 < new Date().getTime()) {
-			players[playerId].worldPos.x = -100;
-			players[playerId].worldPos.y = -100;
-		}
-	}
-}, 1000);*/
-
-var barriers = [
-	{
-		worldPos: {
-			x: 500,
-			y: 500,
-			azimuth: 120
-		},
-		type: 1
-	}
-];
-
-io.sockets.on('connection', function(socket) {
-  socket.emit('currentPlayerData', {
-    playerId: socket.store.id,
-    worldPos: {
-      x: 400,
-      y: 400
-    },
-    rotation: 0
-  });
-  socket.emit('players', players);
-  socket.emit('barriers', barriers);
-
-  socket.on('currentPlayerClientUpdate', function(data) {
-    data.lastUpdate = new Date().getTime();
-    players[data.playerId] = data;
-  });
-
-  setInterval(function() {
-    //socket.emit('players', players);
-  }, 20);
+// enable socket.io to listen for connections from gameservers
+var io_gameserver = require('socket.io').listen(3002);
+io_gameserver.on('connect', function(socket) {
 
 });
 
@@ -74,5 +30,5 @@ app.configure('development', function() {
 });
 
 http.createServer(app).listen(app.get('port'), function() {
-  console.log("Express server listening on port " + app.get('port'));
+  console.log("masterserver listening on port " + app.get('port'));
 });

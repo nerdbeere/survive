@@ -9,7 +9,15 @@ var port = process.env.PORT || config.port;
 var express = require('express');
 var http = require('http');
 var path = require('path');
+
 var io = require('socket.io').listen(port + 1);
+
+var io_client = require('socket.io-client');
+var masterCon = io_client.connect(config.master.host + ':' + config.master.port, {reconnect: true});
+
+masterCon.on('connect', function(){
+	console.log('connected to master on port ' + config.master.port);
+});
 
 io.set('transports', [
 	'websocket'
@@ -70,13 +78,12 @@ app.configure(function() {
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
-  app.use(express.static(path.join(__dirname + '/../', 'client/')));
 });
 
 app.configure('development', function() {
   app.use(express.errorHandler());
 });
 
-http.createServer(app).listen(app.get('port'), function() {
-  console.log("Express server listening on port " + app.get('port'));
+http.createServer(app).listen(config.port, function() {
+  console.log("gameserver listening on port " + config.port);
 });

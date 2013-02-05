@@ -169,4 +169,11 @@ pip-log.txt
 # Mac crap
 .DS_Store
 
-server/node_modules/
+gameserver/node_modules/
+masterserver/node_modules/
+
+atlassian-ide-plugin.xml
+us.stackdump
+.idea/*
+.idea/misc.xml
+gameserver/config.js

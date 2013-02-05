@@ -33,7 +33,7 @@ Survive.Game = (function() {
 
 		Survive.Engine = new Engine();
 
-		Survive.socket = io.connect('127.0.0.1:3001');
+		Survive.socket = io.connect('127.0.0.1:3011');
 
 		$elem = $('#map');
 		Survive.canvas.elem = $elem[0];
