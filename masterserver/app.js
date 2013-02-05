@@ -7,10 +7,20 @@ var http = require('http');
 var path = require('path');
 var io = require('socket.io').listen(3001);
 
+var gameServers = {};
+
 // enable socket.io to listen for connections from gameservers
 var io_gameserver = require('socket.io').listen(3002);
-io_gameserver.on('connect', function(socket) {
+io_gameserver.on('connection', function(socket) {
+	socket.on('register', function(data) {
+		gameServers[data.id] = data;
+	});
+});
 
+io.on('connection', function(socket) {
+	setInterval(function() {
+		socket.emit('gameserver', gameServers);
+	}, 500);
 });
 
 var app = express();

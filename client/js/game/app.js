@@ -29,11 +29,11 @@ Survive.Game = (function() {
 	var players = {};
 	var barriers = {};
 
-	function init() {
+	function init(server) {
 
 		Survive.Engine = new Engine();
 
-		Survive.socket = io.connect('127.0.0.1:3011');
+		Survive.socket = io.connect(server.host + ':' + server.port);
 
 		$elem = $('#map');
 		Survive.canvas.elem = $elem[0];
@@ -146,8 +146,8 @@ Survive.Game = (function() {
 		getHeight: function() {
 			return height;
 		},
-		init: function() {
-			init();
+		init: function(server) {
+			init(server);
 		}
 	};
 })();

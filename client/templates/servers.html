@@ -1,0 +1,9 @@
+<div ng-controller="ServersController">
+    <h2>Servers</h2>
+    <table class="table">
+        <tr ng-repeat="server in servers">
+            <td>{{server.id}}</td>
+            <td><a href="#/play/{{server.host}}/{{server.port}}">{{server.name}}</a></td>
+        </tr>
+    </table>
+</div>

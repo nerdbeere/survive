@@ -15,9 +15,16 @@ var io = require('socket.io').listen(port + 1);
 var io_client = require('socket.io-client');
 var masterCon = io_client.connect(config.master.host + ':' + config.master.port, {reconnect: true});
 
-masterCon.on('connect', function(){
+masterCon.on('connect', function(socket){
 	console.log('connected to master on port ' + config.master.port);
 });
+masterCon.emit('register', {
+	id: config.id,
+	name: config.name,
+	port: config.port + 1,
+	host: config.host
+});
+
 
 io.set('transports', [
 	'websocket'
