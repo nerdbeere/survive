@@ -10,3 +10,7 @@ canvas {
 .container.wrapper {
 	margin-top: 40px;
 }
+
+.container.ingame {
+    width: 100% !important;
+}

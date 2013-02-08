@@ -1,5 +1,6 @@
 function PlayController($rootScope, $routeParams) {
-	Survive.Game.init({
+    $rootScope.ingame = true;
+    Survive.Game.init({
 		host: $routeParams.host,
 		port: $routeParams.port
 	});
