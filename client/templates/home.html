@@ -1,1 +1,29 @@
-<h2>Home</h2>
+<div class="row">
+    <div class="span8 offset2" ng-hide="loggedIn" ng-controller="UserLoginController">
+        <h3>Login</h3>
+        <form class="form-horizontal well">
+            <div class="control-group">
+                <label class="control-label" for="inputEmail">Email</label>
+
+                <div class="controls">
+                    <input type="text" id="inputEmail" ng-bind="user.data.email" placeholder="test@test.local">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputPassword">Password</label>
+
+                <div class="controls">
+                    <input type="password" id="inputPassword" ng-bind="user.data.password" placeholder="test">
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="checkbox">
+                        <input type="checkbox"> Remember me
+                    </label>
+                    <button type="submit" class="btn" ng-click="user.login()">Sign in</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
