@@ -8,3 +8,5 @@ Installation
  * create a config.js using the config.example.js in the gameserver directory
  * start the masterserver with `node app.js`
  * start the gameserver(s) with `node app.js`
+
+ After that you may visit `localhost:3000` with your browser

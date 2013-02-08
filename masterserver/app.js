@@ -9,7 +9,7 @@ var io = require('socket.io').listen(3001);
 
 var gameServers = {};
 var dummyUser = {
-    email: 'test@test.local',
+    email: 'test',
     password: 'test'
 };
 
@@ -25,6 +25,12 @@ io.on('connection', function (socket) {
     setInterval(function () {
         socket.emit('gameserver', gameServers);
     }, 500);
+
+    socket.on('userLogin', function (data) {
+        if (data.email === dummyUser.email && data.password === dummyUser.password) {
+            socket.emit('userLoggedIn', {error: {}, data: {}});
+        }
+    });
 });
 
 var app = express();
