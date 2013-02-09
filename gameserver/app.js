@@ -50,7 +50,39 @@ var barriers = [
             azimuth: 120
         },
         type: 1
-    }
+    },
+    {
+        worldPos: {
+            x: 200,
+            y: 500,
+            azimuth: 100
+        },
+        type: 1
+    },
+    {
+        worldPos: {
+            x: 500,
+            y: 300,
+            azimuth: 170
+        },
+        type: 1
+    },
+    {
+        worldPos: {
+            x: 523,
+            y: 100,
+            azimuth: 30
+        },
+        type: 1
+    },
+    {
+        worldPos: {
+            x: 200,
+            y: 200,
+            azimuth: 90
+        },
+        type: 1
+    },
 ];
 
 io.sockets.on('connection', function (socket) {

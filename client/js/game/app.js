@@ -102,9 +102,8 @@ Survive.Game = (function() {
 
 	this.createBarriers = function(data) {
 		for(var i = 0; i < data.length; i++) {
-			var p = new Survive.Assets.Barrier();
-			p.set(data[i]);
-			barriers[i] = p;
+            barriers[i] = new Survive.Assets.Barrier();
+            barriers[i].worldPos = data[i].worldPos;
 		}
 		return true;
 	};

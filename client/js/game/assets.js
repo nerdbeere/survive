@@ -22,7 +22,7 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 	width: 20,
 	height: 20,
 	playerId: null,
-	speed: 0.002,
+	speed: 0.02,
 	isCurrentPlayer: true,
 	worldPos: {
 		x: 0,
@@ -47,8 +47,8 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 		var vector = Dot(this.worldPos.x - foreignWorldPos.x, this.worldPos.y - foreignWorldPos.y);
 
 		return {
-			x: this.x + vector.x,
-			y: this.y + vector.y
+			x: this.x - vector.x,
+			y: this.y - vector.y
 		}
 	},
 	update: function() {
@@ -147,6 +147,11 @@ Survive.Assets.Barrier = Survive.Assets.Main.extend({
 			type: this.type
 		};
 	},
+    drawWorldPos: function() {
+        Survive.canvas.context.font = '12pt Calibri';
+        Survive.canvas.context.fillStyle = 'black';
+        Survive.canvas.context.fillText(this.worldPos.x.toFixed(2) + ':' + this.worldPos.y.toFixed(2), this.x - 50, this.y + 30);
+    },
 	update: function() {
 
 		var pos = Survive.Player.calcRelativePosition(this.worldPos);
@@ -162,6 +167,7 @@ Survive.Assets.Barrier = Survive.Assets.Main.extend({
 		Survive.canvas.context.strokeRect(this.x, this.y, this.width, this.height);
 
 		Survive.canvas.context.restore();
+        this.drawWorldPos();
 	}
 });
 
