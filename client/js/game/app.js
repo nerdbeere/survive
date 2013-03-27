@@ -7,6 +7,7 @@ var Survive = {
 		}
 	},
 	Assets: {},
+    Collections: {},
 	socket: {},
 	timer: new Timer(),
 	Player: {},
@@ -41,6 +42,7 @@ Survive.Game = (function() {
 
 		$elem.attr('width', $(window).width());
 		$elem.attr('height', $(window).height());
+        $elem.pos = $elem.offset();
 		width = $(window).width();
 		height = $(window).height();
 
@@ -86,6 +88,15 @@ Survive.Game = (function() {
 				Survive.Player.setMovementY(0);
 			}
 		});
+
+        $elem.on('click', function(e) {
+            var offset = $elem.offset();
+            var coords = {
+                x: e.pageX - offset.left,
+                y: e.pageY - offset.top
+            };
+           Survive.Player.shoot(coords);
+        });
 	}
 
 	this.createPlayers = function(data) {
@@ -133,6 +144,8 @@ Survive.Game = (function() {
 		for(var i in barriers) {
 			barriers[i].update();
 		}
+
+        Survive.Collections.Shots.draw();
 
 		Survive.Assets.MousePosition.draw();
 		FPS.draw(fps);
