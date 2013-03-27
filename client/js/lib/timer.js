@@ -21,9 +21,10 @@ var Timer = Class.extend({
 		this.currentFrame = new Date().getTime();
 		
 		var that = this;
-		this.timeoutID = window.setInterval(function() {
-			that.run();
-		}, interval);
+        (function animloop(){
+            requestAnimFrame(animloop);
+            that.run();
+        })();
 	},
 	
 	run: function() {
