@@ -16,12 +16,15 @@ Survive.Resources.Images = {
 		}
 		this.initComplete = true;
 	},
-	draw: function(name, x, y) {
+	draw: function(name, x, y, canvas) {
 		var imageName = 'image_not_found';
 		if(typeof this.images[name] !== 'undefined') {
 			imageName = name;
 		}
-		Survive.canvas.context.drawImage(this.images[imageName].obj, x, y);
+		if(typeof canvas === 'undefined') {
+			canvas = Survive.canvas;
+		}
+		canvas.context.drawImage(this.images[imageName].obj, x, y);
 	},
 	isLoadingComplete: function() {
 		if(this.initComplete && this.loaded === this.count) {

@@ -7,6 +7,16 @@ canvas {
   cursor: crosshair;
 }
 
+#map, #surface {
+	position: absolute;
+	left: 0;
+	top: 40px;
+}
+
+#map {
+	z-index: 10;
+}
+
 .container.wrapper {
 	margin-top: 40px;
 }

@@ -6,6 +6,13 @@ var Survive = {
 			this.context.clearRect(0, 0, this.elem.width, this.elem.height);
 		}
 	},
+	surface: {
+		elem: {},
+		context: {},
+		clear: function() {
+			this.context.clearRect(0, 0, this.elem.width, this.elem.height);
+		}
+	},
 	Assets: {},
     Collections: {},
 	socket: {},
@@ -19,7 +26,7 @@ var Survive = {
 
 Survive.Game = (function() {
 
-	var $elem, width, height, player;
+	var width, height;
 
 	var STATE_LOADING = true;
 	var STATE_RUNNING = false;
@@ -36,13 +43,19 @@ Survive.Game = (function() {
 
 		Survive.socket = io.connect(server.host + ':' + server.port);
 
-		$elem = $('#map');
-		Survive.canvas.elem = $elem[0];
-		Survive.canvas.context = Survive.canvas.elem.getContext('2d');
+		function initCanvas($elem, ns) {
+			ns.elem = $elem[0];
+			ns.context = ns.elem.getContext('2d');
+			ns.elem.width = $(window).width();
+			ns.elem.height = $(window).height();
+			$elem.attr('width', ns.elem.width);
+			$elem.attr('height', ns.elem.height);
+			$elem.pos = $elem.offset();
+		}
 
-		$elem.attr('width', $(window).width());
-		$elem.attr('height', $(window).height());
-        $elem.pos = $elem.offset();
+		initCanvas($('#map'), Survive.canvas);
+		initCanvas($('#surface'), Survive.surface);
+
 		width = $(window).width();
 		height = $(window).height();
 
@@ -53,7 +66,6 @@ Survive.Game = (function() {
 		});
 
 		FPS = new Survive.Assets.FPS();
-		tiles = new Survive.Assets.Tiles();
 
 		bindEvents();
 	}
@@ -65,6 +77,10 @@ Survive.Game = (function() {
 
 		Survive.socket.on('barriers', function(data) {
 			that.createBarriers(data);
+		});
+
+		Survive.socket.on('tiles', function(data) {
+			that.createTiles(data);
 		});
 
 		Survive.socket.on('currentPlayerData', function(data) {
@@ -89,8 +105,8 @@ Survive.Game = (function() {
 			}
 		});
 
-        $elem.on('click', function(e) {
-            var offset = $elem.offset();
+        $(Survive.canvas.elem).on('mousedown', function(e) {
+            var offset = $(Survive.canvas.elem).offset();
             var coords = {
                 x: e.pageX - offset.left,
                 y: e.pageY - offset.top
@@ -106,15 +122,28 @@ Survive.Game = (function() {
 			}
 			var p = new Survive.Assets.Player();
 			p.set(data[i]);
-			players[p.playerId] = p;
+//			players[p.playerId] = p;
+			Survive.Collections.Players.add(p);
 		}
 		return true;
 	};
 
 	this.createBarriers = function(data) {
 		for(var i = 0; i < data.length; i++) {
-            barriers[i] = new Survive.Assets.Barrier();
-            barriers[i].worldPos = data[i].worldPos;
+            var barrier = new Survive.Assets.Barrier();
+            barrier.worldPos = data[i].worldPos;
+			Survive.Collections.Barriers.add(barrier);
+		}
+		return true;
+	};
+
+	this.createTiles = function(data) {
+		Survive.Collections.Tiles.clear();
+		for(var i = 0; i < data.length; i++) {
+            var tile = new Survive.Assets.Tile();
+			tile.worldPos = data[i].worldPos;
+			tile.type = data[i].type;
+			Survive.Collections.Tiles.add(tile);
 		}
 		return true;
 	};
@@ -131,21 +160,16 @@ Survive.Game = (function() {
 
 	function drawTick(fps) {
 		Survive.canvas.clear();
+		Survive.surface.clear();
 
-		tiles.draw();
+		Survive.Collections.Tiles.draw();
 
 		Survive.Player.update();
 		Survive.Camera.update();
 
-		for(var i in players) {
-			players[i].draw();
-		}
-
-		for(var i in barriers) {
-			barriers[i].update();
-		}
-
-        Survive.Collections.Shots.draw();
+		Survive.Collections.Shots.draw();
+		Survive.Collections.Barriers.draw();
+		Survive.Collections.Players.draw();
 
 		Survive.Assets.MousePosition.draw();
 		FPS.draw(fps);

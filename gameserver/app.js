@@ -9,6 +9,7 @@ var port = process.env.PORT || config.port;
 var express = require('express');
 var http = require('http');
 var path = require('path');
+var tiles = require('./modules/tiles.js');
 
 var io = require('socket.io').listen(port + 1);
 
@@ -41,7 +42,6 @@ var players = {};
  }
  }
  }, 1000);*/
-
 var barriers = [
     {
         worldPos: {
@@ -89,8 +89,8 @@ io.sockets.on('connection', function (socket) {
     socket.emit('currentPlayerData', {
         playerId: socket.store.id,
         worldPos: {
-            x: 400,
-            y: 400
+            x: 900,
+            y: 900
         },
         rotation: 0
     });
@@ -102,9 +102,13 @@ io.sockets.on('connection', function (socket) {
         players[data.playerId] = data;
     });
 
-    setInterval(function () {
+	(function sendUpdates() {
+		setTimeout(sendUpdates, 2000);
         //socket.emit('players', players);
-    }, 20);
+		for(var playerId in players) {
+			io.sockets.socket(playerId).emit('tiles', tiles.getTiles(players[playerId].worldPos));
+		}
+    })();
 
 });
 
