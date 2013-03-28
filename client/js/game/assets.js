@@ -135,16 +135,20 @@ Survive.Assets.Shot = Survive.Assets.Main.extend({
     x: 0,
     y: 0,
     durability: 20,
+    range: 100,
     player: {
         x: 0,
         y: 0
     },
+    distance: 0,
     init: function(coords) {
         this.x = coords.x;
         this.y = coords.y;
 
-        this.player.x = Survive.Player.x * 1;
-        this.player.y = Survive.Player.y * 1;
+        this.player.x = Survive.Player.x;
+        this.player.y = Survive.Player.y;
+
+        this.distance = Vector.getDistance(this.player, {x: this.x, y: this.y});
 
         Survive.Collections.Shots.add(this);
     },
