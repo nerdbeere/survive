@@ -40,9 +40,13 @@ var Vector = {
 	},
 
     getDistance: function(vektor1, vektor2) {
-        return Math.sqrt(Math.pow((vektor1.x - vektor2.x), 2) + Math.pow((vektor1.y - vektor2.y), 2));
+        return Math.pow((vektor1.x - vektor2.x), 2) + Math.pow((vektor1.y - vektor2.y), 2);
     },
-	
+
+    getRealDistance: function() {
+        return Math.sqrt(this.getDistance(vektor1, vektor2));
+    },
+
 	getLengthSquared: function(vector) {
 		return vector.x * vector.x + vector.y * vector.y;
 	},

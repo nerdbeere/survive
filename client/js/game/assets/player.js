@@ -2,8 +2,8 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 	x: 0,
 	y: 0,
 	rotation: 0,
-	width: 20,
-	height: 20,
+	width: 30,
+	height: 30,
 	playerId: null,
 	speed: 0.04,
 	isCurrentPlayer: true,
@@ -34,16 +34,27 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 			y: (this.y - vector.y)|0
 		}
 	},
+    updateWorldPos: function() {
+        var mousePos = Survive.Assets.MousePosition.get();
+        if(this.isCurrentPlayer && this.movement.y === 1) {
+            var vector1 = Dot(mousePos.x - this.x, mousePos.y - this.y);
+
+            Vector.normalize(vector1);
+
+            var newWorldPos = {};
+            newWorldPos.x = this.worldPos.x + vector1.x * this.speed * Survive.timer.delta;
+            newWorldPos.y = this.worldPos.y + vector1.y * this.speed * Survive.timer.delta;
+
+            if(!Survive.CollisionMap.checkForPlayerCollision(newWorldPos)) {
+                this.worldPos.x = newWorldPos.x;
+                this.worldPos.y = newWorldPos.y;
+            }
+        }
+    },
 	update: function() {
 		var mousePos = Survive.Assets.MousePosition.get();
-		if(this.movement.y === 1) {
-			var vector1 = Dot(mousePos.x - this.x, mousePos.y - this.y);
 
-			Vector.normalize(vector1);
-
-			this.worldPos.x += vector1.x * this.speed * Survive.timer.delta;
-			this.worldPos.y += vector1.y * this.speed * Survive.timer.delta;
-		}
+        this.updateWorldPos();
 
 		// player always sticks to the center of the screen
 		if(this.isCurrentPlayer) {
@@ -52,7 +63,7 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 
 			this.drawWorldPos();
 		} else {
-			var playerRelPos = Survive.Player.calcRelativePosition(worldPos);
+			var playerRelPos = Survive.Player.calcRelativePosition(this.worldPos);
 			this.x = playerRelPos.x;
 			this.y = playerRelPos.y;
 		}
@@ -62,7 +73,9 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 			y: this.y
 		}) + 90;
 
-		Survive.socket.emit('currentPlayerClientUpdate', this.get());
+        if(this.isCurrentPlayer) {
+            Survive.socket.emit('currentPlayerClientUpdate', this.get());
+        }
 
 		this.draw();
 	},
@@ -86,7 +99,8 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 		Survive.canvas.context.rotate(angleInRadians);
 		Survive.canvas.context.translate(this.x * -1, this.y * -1);
 
-		Survive.canvas.context.fillStyle = '#FF0000';
+        /*
+
 
 		Survive.canvas.context.beginPath();
 		Survive.canvas.context.arc(this.x, this.y, 2, 0, Math.PI * 2, true);
@@ -105,9 +119,18 @@ Survive.Assets.Player = Survive.Assets.Main.extend({
 		Survive.canvas.context.lineTo(this.x + -1, this.y + -10);
 
 		Survive.canvas.context.stroke();
-		Survive.canvas.context.closePath();
+		Survive.canvas.context.closePath();*/
+
+        Survive.Resources.Images.draw('player', this.x - 10, this.y - 16    );
+        Survive.canvas.context.fillStyle = '#FF0000';
+        Survive.canvas.context.beginPath();
+        Survive.canvas.context.arc(this.x, this.y, 2, 0, Math.PI * 2, true);
+        Survive.canvas.context.closePath();
+        Survive.canvas.context.fill();
 
 		Survive.canvas.context.restore();
+
+        Survive.top.context.strokeRect(this.x - this.width / 2,this.y - this.height / 2,this.width,this.height);
 	},
 	shoot: function(coords) {
 		new Survive.Assets.Shot(coords);

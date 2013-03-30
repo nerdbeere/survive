@@ -2,14 +2,19 @@ Survive.Assets.Barrier = Survive.Assets.Main.extend({
 	x: 0,
 	y: 0,
 	rotation: 0,
-	width: 20,
-	height: 20,
+	width: 64,
+	height: 64,
 	worldPos: {
 		x: 0,
 		y: 0
 	},
-	init: function() {
-
+    type: 'crate',
+	init: function(data) {
+        this.worldPos = data.worldPos;
+        this.type = data.type;
+        this.width = data.width;
+        this.height = data.height;
+        Survive.CollisionMap.add(this.worldPos.x, this.worldPos.y, this.width, this.height);
 	},
 	get: function() {
 		return {
@@ -33,10 +38,9 @@ Survive.Assets.Barrier = Survive.Assets.Main.extend({
 
 		Survive.canvas.context.save();
 
-		Survive.canvas.context.strokeStyle = '#FF0000';
-		Survive.canvas.context.strokeRect(this.x, this.y, this.width, this.height);
+        Survive.Resources.Images.draw(this.type, this.x, this.y, Survive.surface, {width: this.width, height: this.height});
 
 		Survive.canvas.context.restore();
-		this.drawWorldPos();
+		//this.drawWorldPos();
 	}
 });

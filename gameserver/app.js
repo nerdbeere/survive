@@ -10,6 +10,7 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var tiles = require('./modules/tiles.js');
+var barriers = require('./modules/barriers.js');
 
 var io = require('socket.io').listen(port + 1);
 
@@ -33,58 +34,6 @@ io.set('transports', [
 
 var players = {};
 
-// body cleanup interval
-/*setInterval(function() {
- for(var playerId in players) {
- if(players[playerId].lastUpdate + 10000 < new Date().getTime()) {
- players[playerId].worldPos.x = -100;
- players[playerId].worldPos.y = -100;
- }
- }
- }, 1000);*/
-var barriers = [
-    {
-        worldPos: {
-            x: 500,
-            y: 500,
-            azimuth: 120
-        },
-        type: 1
-    },
-    {
-        worldPos: {
-            x: 200,
-            y: 500,
-            azimuth: 100
-        },
-        type: 1
-    },
-    {
-        worldPos: {
-            x: 500,
-            y: 300,
-            azimuth: 170
-        },
-        type: 1
-    },
-    {
-        worldPos: {
-            x: 523,
-            y: 100,
-            azimuth: 30
-        },
-        type: 1
-    },
-    {
-        worldPos: {
-            x: 200,
-            y: 200,
-            azimuth: 90
-        },
-        type: 1
-    },
-];
-
 io.sockets.on('connection', function (socket) {
     socket.emit('currentPlayerData', {
         playerId: socket.store.id,
@@ -94,8 +43,8 @@ io.sockets.on('connection', function (socket) {
         },
         rotation: 0
     });
-    socket.emit('players', players);
-    socket.emit('barriers', barriers);
+    //socket.emit('players', players);
+    socket.emit('barriers', barriers.get());
 
     socket.on('currentPlayerClientUpdate', function (data) {
         data.lastUpdate = new Date().getTime();

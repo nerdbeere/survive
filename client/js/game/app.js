@@ -13,6 +13,13 @@ var Survive = {
 			this.context.clearRect(0, 0, this.elem.width, this.elem.height);
 		}
 	},
+	top: {
+		elem: {},
+		context: {},
+		clear: function() {
+			this.context.clearRect(0, 0, this.elem.width, this.elem.height);
+		}
+	},
 	Assets: {},
     Collections: {},
 	socket: {},
@@ -55,6 +62,7 @@ Survive.Game = (function() {
 
 		initCanvas($('#map'), Survive.canvas);
 		initCanvas($('#surface'), Survive.surface);
+		initCanvas($('#top'), Survive.top);
 
 		width = $(window).width();
 		height = $(window).height();
@@ -105,7 +113,7 @@ Survive.Game = (function() {
 			}
 		});
 
-        $(Survive.canvas.elem).on('mousedown', function(e) {
+        $(Survive.top.elem).on('mousedown', function(e) {
             var offset = $(Survive.canvas.elem).offset();
             var coords = {
                 x: e.pageX - offset.left,
@@ -130,8 +138,7 @@ Survive.Game = (function() {
 
 	this.createBarriers = function(data) {
 		for(var i = 0; i < data.length; i++) {
-            var barrier = new Survive.Assets.Barrier();
-            barrier.worldPos = data[i].worldPos;
+            var barrier = new Survive.Assets.Barrier(data[i]);
 			Survive.Collections.Barriers.add(barrier);
 		}
 		return true;
@@ -161,6 +168,7 @@ Survive.Game = (function() {
 	function drawTick(fps) {
 		Survive.canvas.clear();
 		Survive.surface.clear();
+		Survive.top.clear();
 
 		Survive.Collections.Tiles.draw();
 
@@ -168,11 +176,11 @@ Survive.Game = (function() {
 		Survive.Camera.update();
 
 		Survive.Collections.Shots.draw();
+		Survive.CollisionMap.draw();
 		Survive.Collections.Barriers.draw();
 		Survive.Collections.Players.draw();
 
 		Survive.Assets.MousePosition.draw();
-		FPS.draw(fps);
 	}
 
 	return {

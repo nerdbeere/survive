@@ -16,7 +16,7 @@ Survive.Resources.Images = {
 		}
 		this.initComplete = true;
 	},
-	draw: function(name, x, y, canvas) {
+	draw: function(name, x, y, canvas, size) {
 		var imageName = 'image_not_found';
 		if(typeof this.images[name] !== 'undefined') {
 			imageName = name;
@@ -24,6 +24,9 @@ Survive.Resources.Images = {
 		if(typeof canvas === 'undefined') {
 			canvas = Survive.canvas;
 		}
+        if(typeof size !== 'undefined') {
+            return canvas.context.drawImage(this.images[imageName].obj, x, y, size.width, size.height);
+        }
 		canvas.context.drawImage(this.images[imageName].obj, x, y);
 	},
 	isLoadingComplete: function() {
@@ -39,6 +42,15 @@ Survive.Resources.Images = {
 		},
 		tile_stone: {
 			path: 'tile_stone.png'
+		},
+		crate: {
+			path: 'box2.png'
+		},
+        box3: {
+			path: 'box3.png'
+		},
+		player: {
+			path: 'player_1.png'
 		},
 		image_not_found: {
 			path: 'image_not_found.png'
