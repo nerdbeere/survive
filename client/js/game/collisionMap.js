@@ -32,7 +32,12 @@ Survive.CollisionMap = new (Class.extend({
     clear: function() {
         this.stack = [];
     },
+    previousWorldPos: {x:0, y:0},
     checkForPlayerCollision: function(worldPos) {
+        if(worldPos.x === this.previousWorldPos.x && worldPos.y === this.previousWorldPos.y) {
+            return false;
+        }
+        this.previousWorldPos = worldPos;
         var nearest = 0, distance = 0;
         for(var i = 0; i < this.stack.length; i++) {
             var currDist = Vector.getDistance(Survive.Player.worldPos, this.stack[i].worldPos);
