@@ -9,8 +9,8 @@ var port = process.env.PORT || config.port;
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var tiles = require('./modules/tiles.js');
 var barriers = require('./modules/barriers.js');
+var chunks = require('./modules/chunks.js');
 
 var io = require('socket.io').listen(port + 1);
 
@@ -38,8 +38,8 @@ io.sockets.on('connection', function (socket) {
     socket.emit('currentPlayerData', {
         playerId: socket.store.id,
         worldPos: {
-            x: 900,
-            y: 900
+            x: 5000,
+            y: 5000
         },
         rotation: 0
     });
@@ -52,10 +52,10 @@ io.sockets.on('connection', function (socket) {
     });
 
 	(function sendUpdates() {
-		setTimeout(sendUpdates, 2000);
+		setTimeout(sendUpdates, 200);
         //socket.emit('players', players);
 		for(var playerId in players) {
-			io.sockets.socket(playerId).emit('tiles', tiles.getTiles(players[playerId].worldPos));
+            io.sockets.socket(playerId).emit('chunks', chunks.get(players[playerId].worldPos));
 		}
     })();
 

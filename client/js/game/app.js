@@ -86,9 +86,8 @@ Survive.Game = (function() {
 		Survive.socket.on('barriers', function(data) {
 			that.createBarriers(data);
 		});
-
-		Survive.socket.on('tiles', function(data) {
-			that.createTiles(data);
+        Survive.socket.on('chunks', function(data) {
+			Survive.Chunks.chunks = data;
 		});
 
 		Survive.socket.on('currentPlayerData', function(data) {
@@ -177,6 +176,7 @@ Survive.Game = (function() {
 
 		Survive.Collections.Shots.draw();
 		Survive.CollisionMap.draw();
+		Survive.Chunks.draw();
 		Survive.Collections.Barriers.draw();
 		Survive.Collections.Players.draw();
 

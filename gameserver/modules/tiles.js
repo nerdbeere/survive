@@ -29,6 +29,21 @@ function calcTiles(center) {
 	return tiles;
 }
 
-exports.getTiles = function(pos) {
-	return calcTiles(pos);
+exports.getTiles = function(pos, chunkSize) {
+    var tileCount = chunkSize / tileSize;
+    var tiles = [];
+
+    for(var i = 0; i < tileCount; i++) {
+        for(var j = 0; j < tileCount; j++) {
+            tiles.push({
+                worldPos: {
+                    x: pos.x + i * tileSize,
+                    y: pos.y + j * tileSize
+                },
+                type: 1
+            });
+        }
+    }
+
+    return tiles;
 };
