@@ -157,6 +157,8 @@ Survive.Game = (function() {
 		Survive.Chunks.draw();
 		Survive.Collections.Barriers.draw();
 		Survive.Collections.Players.draw();
+		Survive.Collections.Zombies.draw();
+		Survive.Collections.Paths.draw();
 
 		Survive.Assets.MousePosition.draw();
 	}

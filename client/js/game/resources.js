@@ -52,6 +52,9 @@ Survive.Resources.Images = {
 		player: {
 			path: 'player_1.png'
 		},
+		zombie: {
+			path: 'zombie.png'
+		},
 		image_not_found: {
 			path: 'image_not_found.png'
 		}

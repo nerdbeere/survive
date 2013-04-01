@@ -51,7 +51,7 @@ io.sockets.on('connection', function (socket) {
     });
 
 	(function sendUpdates() {
-		setTimeout(sendUpdates, 2000);
+		setTimeout(sendUpdates, 200);
         //socket.emit('players', players);
 		for(var playerId in players) {
             io.sockets.socket(playerId).emit('chunks', chunks.get(players[playerId].worldPos));
