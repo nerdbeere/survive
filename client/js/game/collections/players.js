@@ -1,0 +1,1 @@
+Survive.Collections.Players = new Survive.Collections.Main();
