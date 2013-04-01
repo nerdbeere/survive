@@ -37,9 +37,7 @@ Survive.Assets.Barrier = Survive.Assets.Main.extend({
 		this.update();
 
 		Survive.canvas.context.save();
-
         Survive.Resources.Images.draw(this.type, this.x, this.y, Survive.surface, {width: this.width, height: this.height});
-
 		Survive.canvas.context.restore();
 		//this.drawWorldPos();
 	}

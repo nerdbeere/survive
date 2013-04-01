@@ -83,9 +83,6 @@ Survive.Game = (function() {
 			that.createPlayers(data);
 		});
 
-		Survive.socket.on('barriers', function(data) {
-			that.createBarriers(data);
-		});
         Survive.socket.on('chunks', function(data) {
 			Survive.Chunks.chunks = data;
 		});
@@ -131,25 +128,6 @@ Survive.Game = (function() {
 			p.set(data[i]);
 //			players[p.playerId] = p;
 			Survive.Collections.Players.add(p);
-		}
-		return true;
-	};
-
-	this.createBarriers = function(data) {
-		for(var i = 0; i < data.length; i++) {
-            var barrier = new Survive.Assets.Barrier(data[i]);
-			Survive.Collections.Barriers.add(barrier);
-		}
-		return true;
-	};
-
-	this.createTiles = function(data) {
-		Survive.Collections.Tiles.clear();
-		for(var i = 0; i < data.length; i++) {
-            var tile = new Survive.Assets.Tile();
-			tile.worldPos = data[i].worldPos;
-			tile.type = data[i].type;
-			Survive.Collections.Tiles.add(tile);
 		}
 		return true;
 	};

@@ -9,7 +9,6 @@ var port = process.env.PORT || config.port;
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var barriers = require('./modules/barriers.js');
 var chunks = require('./modules/chunks.js');
 
 var io = require('socket.io').listen(port + 1);
@@ -44,7 +43,7 @@ io.sockets.on('connection', function (socket) {
         rotation: 0
     });
     //socket.emit('players', players);
-    socket.emit('barriers', barriers.get());
+    //socket.emit('barriers', barriers.get());
 
     socket.on('currentPlayerClientUpdate', function (data) {
         data.lastUpdate = new Date().getTime();

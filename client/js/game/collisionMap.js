@@ -34,6 +34,8 @@ Survive.CollisionMap = new (Class.extend({
     },
     previousWorldPos: {x:0, y:0},
     checkForPlayerCollision: function(worldPos) {
+        return false;
+
         if(worldPos.x === this.previousWorldPos.x && worldPos.y === this.previousWorldPos.y) {
             return false;
         }

@@ -51,6 +51,14 @@ var barriers = [
     },
 ];
 
-exports.get = function() {
-    return barriers;
+exports.get = function(pos) {
+    return {
+        worldPos: {
+            x: pos.x + 100,
+            y: pos.y + 100
+        },
+        type: 'crate',
+        width: 64,
+        height: 64
+    };
 };

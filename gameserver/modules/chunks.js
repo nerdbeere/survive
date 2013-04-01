@@ -1,5 +1,6 @@
 
 var tiles = require('./tiles.js');
+var barriers = require('./barriers.js');
 
 var chunkSize = 512;
 
@@ -20,7 +21,8 @@ function buildChunk(chunkWorldPos) {
         worldPos: chunkWorldPos,
         size: chunkSize,
         payload: {
-            tiles: tiles.getTiles(chunkWorldPos, chunkSize)
+            tiles: tiles.getTiles(chunkWorldPos, chunkSize),
+            barriers: barriers.get(chunkWorldPos)
         }
     };
 }
