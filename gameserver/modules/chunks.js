@@ -67,7 +67,7 @@ exports.get = function(pos) {
         var g = grid.clone();
         var zombieCollPos = calcCollPos(mainChunk, chunks[i].payload.zombies[0].worldPos);
         var finder = new PF.DijkstraFinder();
-        chunks[i].payload.zombies[0].path = finder.findPath(zombieCollPos.x, zombieCollPos.y, playerCollPos.x, playerCollPos.y, g);
+        chunks[i].payload.zombies[0].path = [finder.findPath(zombieCollPos.x, zombieCollPos.y, playerCollPos.x, playerCollPos.y, g)[1]];
         chunks[i].origin = {x: mainChunk.worldPos.x - chunkSize, y: mainChunk.worldPos.y - chunkSize};
     }
 

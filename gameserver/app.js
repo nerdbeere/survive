@@ -10,6 +10,7 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var chunks = require('./modules/chunks.js');
+var t = require('./modules/timer.js');
 
 var io = require('socket.io').listen(port + 1);
 
@@ -50,15 +51,15 @@ io.sockets.on('connection', function (socket) {
         players[data.playerId] = data;
     });
 
-	(function sendUpdates() {
-		setTimeout(sendUpdates, 200);
-        //socket.emit('players', players);
-		for(var playerId in players) {
+    t.timer.addJob(function() {
+        for(var playerId in players) {
             io.sockets.socket(playerId).emit('chunks', chunks.get(players[playerId].worldPos));
-		}
-    })();
+        }
+    });
 
 });
+
+t.timer.start(200);
 
 var app = express();
 
