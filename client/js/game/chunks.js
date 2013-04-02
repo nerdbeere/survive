@@ -17,8 +17,11 @@ Survive.Chunks = new (Class.extend({
             }
             Survive.Collections.Barriers.concat(this.chunks[i].payload.barriers);
             Survive.Collections.Tiles.concat(this.chunks[i].payload.tiles);
-            Survive.Collections.Paths.concat(this.chunks[i].payload.zombies[0].path);
-            Survive.Collections.Zombies.concat(this.chunks[i].payload.zombies[0]);
+
+			if(this.chunks[i].payload.zombies.length > 0) {
+				Survive.Collections.Paths.concat(this.chunks[i].payload.zombies[0].path);
+				Survive.Collections.Zombies.concat(this.chunks[i].payload.zombies[0]);
+			}
         }
         if(typeof this.chunks[0] === 'undefined') {
             return false;

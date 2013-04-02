@@ -3,17 +3,10 @@
  */
 
 var config = require('./config');
-
-var port = process.env.PORT || config.port;
-
+var game = require('./modules/game.js');
+var port = config.port;
 var express = require('express');
 var http = require('http');
-var path = require('path');
-var chunks = require('./modules/chunks.js');
-var t = require('./modules/timer.js');
-
-var io = require('socket.io').listen(port + 1);
-
 var io_client = require('socket.io-client');
 var masterCon = io_client.connect(config.master.host + ':' + config.master.port, {reconnect: true});
 
@@ -26,40 +19,6 @@ masterCon.emit('register', {
     port: config.port + 1,
     host: config.host
 });
-
-
-io.set('transports', [
-    'websocket'
-]);
-
-var players = {};
-
-io.sockets.on('connection', function (socket) {
-    socket.emit('currentPlayerData', {
-        playerId: socket.store.id,
-        worldPos: {
-            x: 5000,
-            y: 5000
-        },
-        rotation: 0
-    });
-    //socket.emit('players', players);
-    //socket.emit('barriers', barriers.get());
-
-    socket.on('currentPlayerClientUpdate', function (data) {
-        data.lastUpdate = new Date().getTime();
-        players[data.playerId] = data;
-    });
-
-    t.timer.addJob(function() {
-        for(var playerId in players) {
-            io.sockets.socket(playerId).emit('chunks', chunks.get(players[playerId].worldPos));
-        }
-    });
-
-});
-
-t.timer.start(200);
 
 var app = express();
 
